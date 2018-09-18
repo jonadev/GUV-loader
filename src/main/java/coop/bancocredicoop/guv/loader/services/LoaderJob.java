@@ -1,5 +1,6 @@
 package coop.bancocredicoop.guv.loader.services;
 
+import coop.bancocredicoop.guv.loader.models.GUVConfig;
 import coop.bancocredicoop.guv.loader.repositories.ConfigRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -24,7 +25,7 @@ public class LoaderJob {
     @Bean
     public String getCronValue()
     {
-        return configRepository.getCronTime();
+        return configRepository.getValueOf(GUVConfig.LOADER_CRON_VALUE);
     }
 
     @Scheduled(cron="#{@getCronValue}")
