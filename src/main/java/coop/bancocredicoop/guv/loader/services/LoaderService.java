@@ -18,7 +18,7 @@ import reactor.core.publisher.Flux;
 public class LoaderService {
 
     private static Logger log = LoggerFactory.getLogger(LoggerFactory.class);
-    private Integer pageSize, percentageSize = 0;
+    private Integer pageSize, percentageSize, actualTotal = 0;
 
     @Autowired
     ChequeRepository db;
@@ -66,21 +66,23 @@ public class LoaderService {
      *  100% ------ pageSize
      *   X   ------ total
      *
-     *   X < percentageSize
+     *   X <= percentageSize
      *
      * @return Boolean
      */
     private Boolean moreChequesAreNeeded(){
         loadSizing();
         return mongo.count()
-                .map(total ->
-                        total == null || total == 0L || (100 * total / pageSize) <= percentageSize)
+                .map(total -> {
+                        actualTotal = total.intValue();
+                        return total == 0L || (100 * total / pageSize) <= percentageSize;
+                        })
                 .block();
     }
 
     private Pageable getPage() {
         //FIXME: ora-01795 - maximum number of expressions in a list is 1000
-        return PageRequest.of(0, pageSize);
+        return PageRequest.of(0, pageSize - actualTotal);
     }
 
     private Flux<CorreccionCheque> storeInMongo(Flux<CorreccionCheque> chequesFlux) {
