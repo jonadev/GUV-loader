@@ -21,13 +21,13 @@ public class LoaderService {
     private Integer pageSize, percentageSize, actualTotal = 0;
 
     @Autowired
-    ChequeRepository db;
+    private ChequeRepository db;
 
     @Autowired
-    CorreccionImporteRepository mongo;
+    private CorreccionImporteRepository mongo;
 
     @Autowired
-    ConfigRepository config;
+    private ConfigRepository config;
 
     void load(){
         if(moreChequesAreNeeded()){
