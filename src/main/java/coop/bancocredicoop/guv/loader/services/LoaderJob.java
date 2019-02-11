@@ -1,7 +1,6 @@
 package coop.bancocredicoop.guv.loader.services;
 
 import coop.bancocredicoop.guv.loader.models.GUVConfig;
-import coop.bancocredicoop.guv.loader.repositories.ConfigRepository;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -17,18 +16,9 @@ public class LoaderJob {
     private static Logger log = LoggerFactory.getLogger(LoaderJob.class);
 
     @Autowired
-    private ConfigRepository configRepository;
-
-    @Autowired
     private LoaderService service;
 
-    @Bean
-    public String getCronValue()
-    {
-        return configRepository.getValueOf(GUVConfig.LOADER_CRON_VALUE);
-    }
-
-    @Scheduled(cron="#{@getCronValue}")
+    @Scheduled(cron="0 * * * * *")
     public void reportCurrentTime() {
         String taskId = UUID.randomUUID().toString();
         log.info("Running loader task: {}", taskId);
