@@ -19,8 +19,8 @@ public class ImporteLoaderJob {
     @Scheduled(cron="0 * * * * *")
     public void reportCurrentTime() {
         String taskId = UUID.randomUUID().toString();
-        log.info("Running loader task: {}", taskId);
+        log.info("Running IMPORTE loader task: {}", taskId);
         service.loadImporte();
-        log.info("Finish loader task: {}", taskId);
+        log.info("Finish IMPORTE loader task: {}", taskId);
     }
 }
