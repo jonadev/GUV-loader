@@ -1,6 +1,5 @@
 package coop.bancocredicoop.guv.loader.services;
 
-import coop.bancocredicoop.guv.loader.models.GUVConfig;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionCheque;
 import coop.bancocredicoop.guv.loader.models.EstadoCheque;
 import coop.bancocredicoop.guv.loader.repositories.ChequeRepository;
