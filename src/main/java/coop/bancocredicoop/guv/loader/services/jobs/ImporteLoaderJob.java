@@ -1,4 +1,4 @@
-package coop.bancocredicoop.guv.loader.services;
+package coop.bancocredicoop.guv.loader.services.jobs;
 
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -9,9 +9,9 @@ import org.springframework.stereotype.Component;
 import java.util.UUID;
 
 @Component
-public class LoaderJob {
+public class ImporteLoaderJob {
 
-    private static Logger log = LoggerFactory.getLogger(LoaderJob.class);
+    private static Logger log = LoggerFactory.getLogger(ImporteLoaderJob.class);
 
     @Autowired
     private LoaderService service;
@@ -20,7 +20,7 @@ public class LoaderJob {
     public void reportCurrentTime() {
         String taskId = UUID.randomUUID().toString();
         log.info("Running loader task: {}", taskId);
-        service.load();
+        service.loadImporte();
         log.info("Finish loader task: {}", taskId);
     }
 }

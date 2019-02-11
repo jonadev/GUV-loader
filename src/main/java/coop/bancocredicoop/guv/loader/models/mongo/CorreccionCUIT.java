@@ -4,7 +4,7 @@ import java.io.Serializable;
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CorreccionCheque implements Serializable {
+public class CorreccionCUIT implements Serializable {
 
     private Long id;
     private BigDecimal importe;
@@ -12,7 +12,7 @@ public class CorreccionCheque implements Serializable {
     private String cuit;
     private Integer codMoneda;
 
-    public CorreccionCheque(Long id, BigDecimal importe, Date fechaDiferida, String cuit, Integer codMoneda) {
+    public CorreccionCUIT(Long id, BigDecimal importe, Date fechaDiferida, String cuit, Integer codMoneda) {
         this.id = id;
         this.importe = importe;
         this.fechaDiferida = fechaDiferida;
