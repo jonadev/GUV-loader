@@ -4,18 +4,15 @@ import coop.bancocredicoop.guv.loader.models.EstadoCheque;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionImporte;
 import coop.bancocredicoop.guv.loader.repositories.ChequeRepository;
 import coop.bancocredicoop.guv.loader.repositories.mongo.CorreccionImporteRepository;
+import coop.bancocredicoop.guv.loader.utils.LoaderUtils;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
-import org.springframework.core.env.Environment;
-import org.springframework.data.domain.PageRequest;
-import org.springframework.data.domain.Pageable;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Flux;
 import reactor.core.publisher.Mono;
 
 import java.util.List;
-import java.util.Objects;
 
 @Service
 public class ImporteService {
@@ -23,10 +20,10 @@ public class ImporteService {
     private static Logger log = LoggerFactory.getLogger(LoggerFactory.class);
 
     @Autowired
-    private Environment env;
+    private ChequeRepository db;
 
     @Autowired
-    private ChequeRepository db;
+    private LoaderUtils utils;
 
     @Autowired
     private CorreccionImporteRepository importeRepository;
@@ -38,13 +35,6 @@ public class ImporteService {
     public Mono<List<CorreccionImporte>> doLoad(){
         Flux<CorreccionImporte> chequeFlux = retrieveFromDatabase();
         return storeInMongo(chequeFlux).collectList();
-    }
-
-    private Pageable getPage(int actualTotal) {
-        //FIXME: ora-01795 - maximum number of expressions in a list is 1000
-        return PageRequest.of(
-                0,
-                Integer.parseInt(Objects.requireNonNull(env.getProperty("loader.page.size"))) - actualTotal);
     }
 
     private Flux<CorreccionImporte> storeInMongo(Flux<CorreccionImporte> chequesFlux) {
@@ -67,7 +57,7 @@ public class ImporteService {
                         db.findCorreccionImporte(
                                 EstadoCheque.VALIDAR_CMC7,
                                 idCheques,
-                                getPage(idCheques.size())))
+                                utils.getPage(idCheques.size())))
                 .doOnError(e -> log.error("Failed to retrieve cheques from DB", e))
                 .flatMapMany(Flux::fromIterable);
     }

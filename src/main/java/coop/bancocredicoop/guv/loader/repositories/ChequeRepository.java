@@ -1,6 +1,7 @@
 package coop.bancocredicoop.guv.loader.repositories;
 
 import coop.bancocredicoop.guv.loader.models.Cheque;
+import coop.bancocredicoop.guv.loader.models.Deposito;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionCMC7;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionFecha;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionImporte;
@@ -23,7 +24,8 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
             "FROM Cheque c " +
             "JOIN c.deposito d " +
             "JOIN c.moneda m " +
-            "WHERE c.estado = :estado " +
+            "WHERE c.activo = 1 " +
+            "AND c.estado = :estado " +
             "AND (c.importe = 0 OR c.importe IS NULL) " +
             "AND c.id NOT IN (:ids) " +
             "ORDER BY d.prioridadForzada ASC")
@@ -37,13 +39,16 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "FROM Cheque c " +
                     "JOIN c.deposito d " +
                     "JOIN c.moneda m " +
-                    "WHERE c.estado = :estado " +
-                    "AND (c.importe = 0 OR c.importe IS NULL) " +
+                    "WHERE c.activo = 1 " +
+                    "AND c.estado = :estado " +
+                    "AND d.tipoOperatoria IN (:tiposOperatoria) " +
+                    "AND c.cuit IS NULL " +
                     "AND c.id NOT IN (:ids) " +
                     "ORDER BY d.prioridadForzada ASC")
     List<CorreccionCUIT> findCorreccionCUIT(@Param("estado") EstadoCheque estado,
-                                               @Param("ids") List<Long> idList,
-                                               Pageable request);
+                                            @Param("tiposOperatoria") List<Deposito.TipoOperatoria> tiposOperatoria,
+                                            @Param("ids") List<Long> idList,
+                                            Pageable request);
 
     @Query(value =
             "SELECT new coop.bancocredicoop.guv.loader.models.mongo.CorreccionCMC7(c.id, c.importe, " +
@@ -51,8 +56,9 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "FROM Cheque c " +
                     "JOIN c.deposito d " +
                     "JOIN c.moneda m " +
-                    "WHERE c.estado = :estado " +
-                    "AND (c.importe = 0 OR c.importe IS NULL) " +
+                    "WHERE c.activo = 1 " +
+                    "AND c.estado = :estado " +
+                    "AND c.numero IS NULL " +
                     "AND c.id NOT IN (:ids) " +
                     "ORDER BY d.prioridadForzada ASC")
     List<CorreccionCMC7> findCorreccionCMC7(@Param("estado") EstadoCheque estado,
@@ -65,11 +71,14 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "FROM Cheque c " +
                     "JOIN c.deposito d " +
                     "JOIN c.moneda m " +
-                    "WHERE c.estado = :estado " +
-                    "AND (c.importe = 0 OR c.importe IS NULL) " +
+                    "WHERE c.activo = 1 " +
+                    "AND c.estado = :estado " +
+                    "AND d.tipoOperatoria IN (:tiposOperatoria) " +
+                    "AND (c.fechaIngreso1 IS NULL OR c.fechaIngreso2 IS NULL) " +
                     "AND c.id NOT IN (:ids) " +
                     "ORDER BY d.prioridadForzada ASC")
     List<CorreccionFecha> findCorreccionFecha(@Param("estado") EstadoCheque estado,
+                                              @Param("tiposOperatoria") List<Deposito.TipoOperatoria> tiposOperatoria,
                                               @Param("ids") List<Long> idList,
                                               Pageable request);
 

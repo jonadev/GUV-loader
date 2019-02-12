@@ -8,6 +8,7 @@ import javax.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.math.BigInteger;
 import java.util.Date;
 
 @Entity
@@ -15,6 +16,9 @@ public class Cheque implements Serializable {
 
     @Id
     private Long id;
+
+    @Column(name = "activo")
+    private boolean activo;
 
     @Column(name = "importe")
     private BigDecimal importe;
@@ -35,5 +39,14 @@ public class Cheque implements Serializable {
 
     @ManyToOne(fetch = FetchType.LAZY)
     private Moneda moneda;
+
+    @Column(name = "fechaingreso1")
+    private Date fechaIngreso1;
+
+    @Column(name = "fechaingreso2")
+    private Date fechaIngreso2;
+
+    @Column(name = "numero")
+    private BigInteger numero;
 
 }
