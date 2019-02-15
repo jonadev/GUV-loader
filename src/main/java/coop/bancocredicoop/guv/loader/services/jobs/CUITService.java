@@ -29,8 +29,8 @@ public class CUITService {
     @Autowired
     private CorreccionCUITRepository cuitRepository;
 
-    public Mono<Long> count(){
-        return cuitRepository.count();
+    public Mono<Long> getSize(Boolean run){
+        return run ? cuitRepository.count() : Mono.just(-1L);
     }
 
     public Mono<List<CorreccionCUIT>> doLoad(){

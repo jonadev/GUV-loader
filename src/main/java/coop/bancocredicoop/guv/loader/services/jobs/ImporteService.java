@@ -28,8 +28,8 @@ public class ImporteService {
     @Autowired
     private CorreccionImporteRepository importeRepository;
 
-    public Mono<Long> count(){
-        return importeRepository.count();
+    public Mono<Long> getSize(Boolean run){
+        return run ? importeRepository.count() : Mono.just(-1L);
     }
 
     public Mono<List<CorreccionImporte>> doLoad(){

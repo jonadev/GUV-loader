@@ -29,8 +29,8 @@ public class FechaService {
     @Autowired
     private CorreccionFechaRepository fechaRepository;
 
-    public Mono<Long> count(){
-        return fechaRepository.count();
+    public Mono<Long> getSize(Boolean run){
+        return run ? fechaRepository.count() : Mono.just(-1L);
     }
 
     public Mono<List<CorreccionFecha>> doLoad(){

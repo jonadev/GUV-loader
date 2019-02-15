@@ -28,8 +28,8 @@ public class CMC7Service {
     @Autowired
     private CorreccionCMC7Repository cmc7Repository;
 
-    public Mono<Long> count(){
-        return cmc7Repository.count();
+    public Mono<Long> getSize(Boolean run){
+        return run ? cmc7Repository.count() : Mono.just(-1L);
     }
 
     public Mono<List<CorreccionCMC7>> doLoad(){

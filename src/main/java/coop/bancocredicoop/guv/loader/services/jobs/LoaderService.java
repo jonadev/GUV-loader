@@ -1,5 +1,10 @@
 package coop.bancocredicoop.guv.loader.services.jobs;
 
+import coop.bancocredicoop.guv.loader.models.Proceso;
+import coop.bancocredicoop.guv.loader.models.mongo.LoaderFlag;
+import coop.bancocredicoop.guv.loader.repositories.mongo.implementations.LoaderRepositoryImpl;
+import org.slf4j.Logger;
+import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
@@ -25,34 +30,46 @@ public class LoaderService {
     @Autowired
     private FechaService fechaService;
 
+    @Autowired
+    private LoaderRepositoryImpl loaderRepository;
+
+    private static Logger log = LoggerFactory.getLogger(LoaderService.class);
+
     void loadImporte(){
-        importeService.count()
-                .map(this::evalSize)
-                .flatMap(bool -> bool ? importeService.doLoad() : Mono.empty())
-                .subscribe();
+        initExecution(Proceso.IMPORTE)
+            .flatMap(importeService::getSize)
+            .map(this::evalSize)
+            .flatMap(load -> load ? importeService.doLoad() : Mono.empty())
+            .map(finish -> finishExecution(Proceso.IMPORTE))
+            .subscribe();
     }
 
     void loadCUIT(){
-        cuitService.count()
+        initExecution(Proceso.CUIT)
+                .flatMap(cuitService::getSize)
                 .map(this::evalSize)
-                .flatMap(bool -> bool ? cuitService.doLoad() : Mono.empty())
+                .flatMap(load -> load ? cuitService.doLoad() : Mono.empty())
+                .map(finish -> finishExecution(Proceso.CUIT))
                 .subscribe();
     }
 
     void loadCMC7(){
-        cmc7Service.count()
+        initExecution(Proceso.CMC7)
+                .flatMap(cmc7Service::getSize)
                 .map(this::evalSize)
-                .flatMap(bool -> bool ? cmc7Service.doLoad() : Mono.empty())
+                .flatMap(load -> load ? cmc7Service.doLoad() : Mono.empty())
+                .map(finish -> finishExecution(Proceso.CMC7))
                 .subscribe();
     }
 
     void loadFecha(){
-        fechaService.count()
+        initExecution(Proceso.FECHA)
+                .flatMap(fechaService::getSize)
                 .map(this::evalSize)
-                .flatMap(bool -> bool ? fechaService.doLoad() : Mono.empty())
+                .flatMap(load -> load ? fechaService.doLoad() : Mono.empty())
+                .map(finish -> finishExecution(Proceso.FECHA))
                 .subscribe();
     }
-
 
     /**
      *  Verifica si se necesita cargar mas cheques.
@@ -73,6 +90,19 @@ public class LoaderService {
             pageSize = 200;
             percentageSize = 50;
         }
-        return total == 0L || (100 * total / pageSize) <= percentageSize;
+        return total >= 0L && (100 * total / pageSize) <= percentageSize;
+    }
+
+    private Mono<Boolean> initExecution(Proceso proceso) {
+        log.debug("Initializing process: " + proceso.name());
+        LoaderFlag flag = loaderRepository.retrieveByProcessName(proceso.name());
+        if(flag == null)
+            loaderRepository.store(new LoaderFlag(proceso.name()));
+        return Mono.just(flag == null);
+    }
+
+    //TODO: logging at omission
+    private Boolean finishExecution(Proceso proceso){
+        return loaderRepository.deleteByProcessName(proceso.name()).wasAcknowledged();
     }
 }
