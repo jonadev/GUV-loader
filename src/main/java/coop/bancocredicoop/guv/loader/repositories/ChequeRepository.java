@@ -28,9 +28,17 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
             "AND c.estado = :estado " +
             "AND (c.importe = 0 OR c.importe IS NULL) " +
             "AND c.id NOT IN (:ids) " +
-            "ORDER BY d.prioridadForzada ASC")
+            "AND c.id NOT IN (" +
+                    "SELECT c2.id " +
+                    "FROM Cheque c2 " +
+                    "JOIN c2.deposito d2 " +
+                    "WHERE d2.estado = :estadoDeposito " +
+                    "AND :observacion member of c2.observaciones) " +
+            "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionImporte> findCorreccionImporte(@Param("estado") EstadoCheque estado,
                                                   @Param("ids") List<Long> idList,
+                                                  @Param("estadoDeposito") Deposito.Estado estadoDeposito,
+                                                  @Param("observacion") Cheque.Observacion observacion,
                                                   Pageable request);
 
     @Query(value =
@@ -44,10 +52,18 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "AND d.tipoOperatoria IN (:tiposOperatoria) " +
                     "AND c.cuit IS NULL " +
                     "AND c.id NOT IN (:ids) " +
-                    "ORDER BY d.prioridadForzada ASC")
+                    "AND c.id NOT IN (" +
+                    "SELECT c2.id " +
+                    "FROM Cheque c2 " +
+                    "JOIN c2.deposito d2 " +
+                    "WHERE d2.estado = :estadoDeposito " +
+                    "AND :observacion member of c2.observaciones) " +
+                    "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionCUIT> findCorreccionCUIT(@Param("estado") EstadoCheque estado,
                                             @Param("tiposOperatoria") List<Deposito.TipoOperatoria> tiposOperatoria,
                                             @Param("ids") List<Long> idList,
+                                            @Param("estadoDeposito") Deposito.Estado estadoDeposito,
+                                            @Param("observacion") Cheque.Observacion observacion,
                                             Pageable request);
 
     @Query(value =
@@ -60,9 +76,17 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "AND c.estado = :estado " +
                     "AND c.numero IS NULL " +
                     "AND c.id NOT IN (:ids) " +
-                    "ORDER BY d.prioridadForzada ASC")
+                    "AND c.id NOT IN (" +
+                    "SELECT c2.id " +
+                    "FROM Cheque c2 " +
+                    "JOIN c2.deposito d2 " +
+                    "WHERE d2.estado = :estadoDeposito " +
+                    "AND :observacion member of c2.observaciones) " +
+                    "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionCMC7> findCorreccionCMC7(@Param("estado") EstadoCheque estado,
                                             @Param("ids") List<Long> idList,
+                                            @Param("estadoDeposito") Deposito.Estado estadoDeposito,
+                                            @Param("observacion") Cheque.Observacion observacion,
                                             Pageable request);
 
     @Query(value =
@@ -76,10 +100,18 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "AND d.tipoOperatoria IN (:tiposOperatoria) " +
                     "AND (c.fechaIngreso1 IS NULL OR c.fechaIngreso2 IS NULL) " +
                     "AND c.id NOT IN (:ids) " +
-                    "ORDER BY d.prioridadForzada ASC")
+                    "AND c.id NOT IN (" +
+                    "SELECT c2.id " +
+                    "FROM Cheque c2 " +
+                    "JOIN c2.deposito d2 " +
+                    "WHERE d2.estado = :estadoDeposito " +
+                    "AND :observacion member of c2.observaciones) " +
+                    "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionFecha> findCorreccionFecha(@Param("estado") EstadoCheque estado,
                                               @Param("tiposOperatoria") List<Deposito.TipoOperatoria> tiposOperatoria,
                                               @Param("ids") List<Long> idList,
+                                              @Param("estadoDeposito") Deposito.Estado estadoDeposito,
+                                              @Param("observacion") Cheque.Observacion observacion,
                                               Pageable request);
 
 

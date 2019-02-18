@@ -1,5 +1,7 @@
 package coop.bancocredicoop.guv.loader.services.jobs;
 
+import coop.bancocredicoop.guv.loader.models.Cheque;
+import coop.bancocredicoop.guv.loader.models.Deposito;
 import coop.bancocredicoop.guv.loader.models.EstadoCheque;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionCMC7;
 import coop.bancocredicoop.guv.loader.repositories.ChequeRepository;
@@ -57,6 +59,8 @@ public class CMC7Service {
                         db.findCorreccionCMC7(
                                 EstadoCheque.VALIDAR_CMC7,
                                 idCheques,
+                                Deposito.Estado.VALIDAR_CMC7,
+                                Cheque.Observacion.CMC7,
                                 utils.getPage(idCheques.size())))
                 .doOnError(e -> log.error("Failed to retrieve cheques from DB", e))
                 .flatMapMany(Flux::fromIterable);

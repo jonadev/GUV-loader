@@ -21,6 +21,10 @@ public class Deposito {
     @Column(name = "tipooperatoria")
     private TipoOperatoria tipoOperatoria;
 
+    @Enumerated(EnumType.STRING)
+    @Column(name = "estado")
+    private Estado estado;
+
     public Long getId() {
         return id;
     }
@@ -53,6 +57,14 @@ public class Deposito {
         this.tipoOperatoria = tipoOperatoria;
     }
 
+    public Estado getEstado() {
+        return estado;
+    }
+
+    public void setEstado(Estado estado) {
+        this.estado = estado;
+    }
+
     public enum TipoOperatoria {
         //Diferidos
         CUSTODIA(true, '6', "CU"), COFA_DIF(true, '5', "CO"), DESCUENTO(true, '7', "CO"), CAUCION(true, '8', "CA"), CHWEB(true, '9', ""), VAL_NEG(true, '1', "CO"),
@@ -83,5 +95,18 @@ public class Deposito {
             }
             return diferidosNames;
         }
+    }
+
+    public enum Estado {
+        INGRESADO,
+        VALIDAR_CMC7,
+        CORREGIDO,
+        BALANCEADO,
+        EN_PROCESO,
+        PRESENTADO,
+        DERIVADO_FILIAL,
+        ELIMINADO,
+        REABIERTO,
+        DIFERIDO_BALANCEADO;
     }
 }

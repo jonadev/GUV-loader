@@ -1,5 +1,6 @@
 package coop.bancocredicoop.guv.loader.services.jobs;
 
+import coop.bancocredicoop.guv.loader.models.Cheque;
 import coop.bancocredicoop.guv.loader.models.Deposito;
 import coop.bancocredicoop.guv.loader.models.EstadoCheque;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionCUIT;
@@ -59,6 +60,8 @@ public class CUITService {
                                 EstadoCheque.VALIDAR_CMC7,
                                 Deposito.TipoOperatoria.getDiferidos(Deposito.TipoOperatoria.VAL_NEG),
                                 idCheques,
+                                Deposito.Estado.VALIDAR_CMC7,
+                                Cheque.Observacion.CUIT,
                                 utils.getPage(idCheques.size())))
                 .doOnError(e -> log.error("Failed to retrieve cheques from DB", e))
                 .flatMapMany(Flux::fromIterable);

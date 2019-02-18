@@ -1,5 +1,6 @@
 package coop.bancocredicoop.guv.loader.services.jobs;
 
+import coop.bancocredicoop.guv.loader.models.Cheque;
 import coop.bancocredicoop.guv.loader.models.Deposito;
 import coop.bancocredicoop.guv.loader.models.EstadoCheque;
 import coop.bancocredicoop.guv.loader.models.mongo.CorreccionFecha;
@@ -59,6 +60,8 @@ public class FechaService {
                                 EstadoCheque.VALIDAR_CMC7,
                                 Deposito.TipoOperatoria.getDiferidos(Deposito.TipoOperatoria.VAL_NEG),
                                 idCheques,
+                                Deposito.Estado.VALIDAR_CMC7,
+                                Cheque.Observacion.FECHA,
                                 utils.getPage(idCheques.size())))
                 .doOnError(e -> log.error("Failed to retrieve cheques from DB", e))
                 .flatMapMany(Flux::fromIterable);
