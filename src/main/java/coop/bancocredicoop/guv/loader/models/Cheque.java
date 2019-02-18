@@ -53,6 +53,9 @@ public class Cheque implements Serializable {
     @ElementCollection(fetch = FetchType.EAGER)
     private Set<Observacion> observaciones;
 
+    @Embedded
+    private CMC7 cmc7;
+
     public Long getId() {
         return id;
     }

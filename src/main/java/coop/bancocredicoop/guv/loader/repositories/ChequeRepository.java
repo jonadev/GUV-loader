@@ -68,7 +68,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
 
     @Query(value =
             "SELECT new coop.bancocredicoop.guv.loader.models.mongo.CorreccionCMC7(c.id, c.importe, " +
-                    "c.fechaDiferida, c.cuit, m.codMoneda) " +
+                    "c.fechaDiferida, c.cuit, m.codMoneda, c.cmc7) " +
                     "FROM Cheque c " +
                     "JOIN c.deposito d " +
                     "JOIN c.moneda m " +
