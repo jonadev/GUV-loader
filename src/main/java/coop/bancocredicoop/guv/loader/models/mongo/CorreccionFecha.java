@@ -1,26 +1,13 @@
 package coop.bancocredicoop.guv.loader.models.mongo;
 
-import java.io.Serializable;
+import coop.bancocredicoop.guv.loader.models.CMC7;
+
 import java.math.BigDecimal;
 import java.util.Date;
 
-public class CorreccionFecha implements Serializable {
+public class CorreccionFecha extends Correccion {
 
-    private Long id;
-    private BigDecimal importe;
-    private Date fechaDiferida;
-    private String cuit;
-    private Integer codMoneda;
-
-    public CorreccionFecha(Long id, BigDecimal importe, Date fechaDiferida, String cuit, Integer codMoneda) {
-        this.id = id;
-        this.importe = importe;
-        this.fechaDiferida = fechaDiferida;
-        this.cuit = cuit;
-        this.codMoneda = codMoneda;
-    }
-
-    public Long getId() {
-        return id;
+    public CorreccionFecha(Long id, BigDecimal importe, Date fechaDiferida, String cuit, Integer codMoneda, CMC7 cmc7) {
+        super(id, importe, fechaDiferida, cuit, codMoneda, cmc7);
     }
 }

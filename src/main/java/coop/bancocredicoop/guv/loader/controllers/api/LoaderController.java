@@ -1,5 +1,6 @@
 package coop.bancocredicoop.guv.loader.controllers.api;
 
+import coop.bancocredicoop.guv.loader.models.mongo.*;
 import coop.bancocredicoop.guv.loader.services.CorreccionService;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
@@ -13,13 +14,13 @@ import reactor.core.publisher.Flux;
 public class LoaderController {
 
     @Autowired
-    private CorreccionService correccionService;
+    private CorreccionService correccionCMC7Service;
 
     private static Logger log = LoggerFactory.getLogger(LoaderController.class);
 
     @GetMapping("/{type}")
-    public Flux findAll(@PathVariable String type) {
-        return this.correccionService.findAll(type);
+    public Flux<? extends Correccion> findAllCMC7(@PathVariable("type") String type) {
+        return this.correccionCMC7Service.findAll(type);
     }
 
 }

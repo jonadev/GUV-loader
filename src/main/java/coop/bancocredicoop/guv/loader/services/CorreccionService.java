@@ -1,10 +1,9 @@
 package coop.bancocredicoop.guv.loader.services;
 
 import coop.bancocredicoop.guv.loader.models.Proceso;
-import coop.bancocredicoop.guv.loader.repositories.mongo.CorreccionCMC7Repository;
-import coop.bancocredicoop.guv.loader.repositories.mongo.CorreccionCUITRepository;
-import coop.bancocredicoop.guv.loader.repositories.mongo.CorreccionFechaRepository;
-import coop.bancocredicoop.guv.loader.repositories.mongo.CorreccionImporteRepository;
+import coop.bancocredicoop.guv.loader.models.mongo.Correccion;
+import coop.bancocredicoop.guv.loader.models.mongo.CorreccionImporte;
+import coop.bancocredicoop.guv.loader.repositories.mongo.*;
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
@@ -30,7 +29,7 @@ public class CorreccionService {
 
     private static Logger log = LoggerFactory.getLogger(CorreccionService.class);
 
-    public Flux findAll(String type) {
+    public Flux<? extends Correccion> findAll(String type) {
         Proceso proceso;
         try{
             proceso = Proceso.valueOf(type.toUpperCase());

@@ -20,7 +20,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
 
     @Query(value =
             "SELECT new coop.bancocredicoop.guv.loader.models.mongo.CorreccionImporte(c.id, c.importe, " +
-                    "c.fechaDiferida, c.cuit, m.codMoneda) " +
+                    "c.fechaDiferida, c.cuit, m.codMoneda, c.cmc7) " +
             "FROM Cheque c " +
             "JOIN c.deposito d " +
             "JOIN c.moneda m " +
@@ -43,7 +43,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
 
     @Query(value =
             "SELECT new coop.bancocredicoop.guv.loader.models.mongo.CorreccionCUIT(c.id, c.importe, " +
-                    "c.fechaDiferida, c.cuit, m.codMoneda) " +
+                    "c.fechaDiferida, c.cuit, m.codMoneda, c.cmc7) " +
                     "FROM Cheque c " +
                     "JOIN c.deposito d " +
                     "JOIN c.moneda m " +
@@ -91,7 +91,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
 
     @Query(value =
             "SELECT new coop.bancocredicoop.guv.loader.models.mongo.CorreccionFecha(c.id, c.importe, " +
-                    "c.fechaDiferida, c.cuit, m.codMoneda) " +
+                    "c.fechaDiferida, c.cuit, m.codMoneda, c.cmc7) " +
                     "FROM Cheque c " +
                     "JOIN c.deposito d " +
                     "JOIN c.moneda m " +
