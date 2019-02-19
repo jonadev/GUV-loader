@@ -4,6 +4,7 @@ import coop.bancocredicoop.guv.loader.models.CMC7;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
+import java.time.LocalDateTime;
 import java.util.Date;
 
 public abstract class Correccion implements Serializable {
@@ -14,6 +15,7 @@ public abstract class Correccion implements Serializable {
     protected String cuit;
     protected Integer codMoneda;
     protected CMC7 cmc7;
+    protected LocalDateTime createdAt;
 
     public Correccion() {}
 
@@ -24,6 +26,7 @@ public abstract class Correccion implements Serializable {
         this.cuit = cuit;
         this.codMoneda = codMoneda;
         this.cmc7 = cmc7;
+        this.createdAt = null;
     }
 
     public Long getId() {
@@ -50,4 +53,11 @@ public abstract class Correccion implements Serializable {
         return cmc7;
     }
 
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
