@@ -15,7 +15,6 @@ import org.springframework.web.server.ResponseStatusException;
 import reactor.core.publisher.Flux;
 
 import java.time.LocalDateTime;
-import java.time.ZoneOffset;
 
 @Service
 public class CorreccionService {
@@ -52,26 +51,26 @@ public class CorreccionService {
         switch(proceso) {
             case IMPORTE:
                 return importeRepository
-                        .findAll()
+                        .findFirst20ByCreatedAtNull()
                         .map(this::setTTL)
                         .map(CorreccionImporte.class::cast)
                         .flatMap(importeRepository::save);
 
             case CMC7:
                 return cmc7Repository
-                        .findAll()
+                        .findFirst20ByCreatedAtNull()
                         .map(this::setTTL)
                         .map(CorreccionCMC7.class::cast)
                         .flatMap(cmc7Repository::save);
             case FECHA:
                 return fechaRepository
-                        .findAll()
+                        .findFirst20ByCreatedAtNull()
                         .map(this::setTTL)
                         .map(CorreccionFecha.class::cast)
                         .flatMap(fechaRepository::save);
             case CUIT:
                 return cuitRepository
-                        .findAll()
+                        .findFirst20ByCreatedAtNull()
                         .map(this::setTTL)
                         .map(CorreccionCUIT.class::cast)
                         .flatMap(cuitRepository::save);
