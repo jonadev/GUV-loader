@@ -1,12 +1,15 @@
 package coop.bancocredicoop.guv.loader.models.mongo;
 
 import coop.bancocredicoop.guv.loader.models.CMC7;
+import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Document;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.time.LocalDateTime;
 import java.util.Date;
 
+@Document
 public abstract class Correccion implements Serializable {
 
     protected Long id;
@@ -15,6 +18,7 @@ public abstract class Correccion implements Serializable {
     protected String cuit;
     protected Integer codMoneda;
     protected CMC7 cmc7;
+    @Indexed(name = "expire_at_120_seconds", expireAfterSeconds = 120)
     protected LocalDateTime createdAt;
 
     public Correccion() {}
