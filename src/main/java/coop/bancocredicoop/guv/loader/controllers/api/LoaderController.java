@@ -19,7 +19,7 @@ public class LoaderController {
     private static Logger log = LoggerFactory.getLogger(LoaderController.class);
 
     @GetMapping("/{type}")
-    public Flux<? extends Correccion> findAllCMC7(@PathVariable("type") String type) {
+    public Flux<? extends Correccion> findAll(@PathVariable("type") String type) {
         return this.correccionCMC7Service.findAll(type);
     }
 
