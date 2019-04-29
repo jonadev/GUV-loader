@@ -6,11 +6,10 @@ import coop.bancocredicoop.guv.loader.repositories.mongo.implementations.LoaderR
 import org.slf4j.Logger;
 import org.slf4j.LoggerFactory;
 import org.springframework.beans.factory.annotation.Autowired;
+import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
-
-import java.util.Objects;
 
 @Service
 public class LoaderService {
@@ -33,7 +32,13 @@ public class LoaderService {
     @Autowired
     private LoaderRepositoryImpl loaderRepository;
 
-    private static Logger log = LoggerFactory.getLogger(LoaderService.class);
+    @Value("${loader.page.size:200}")
+    private Integer pageSize;
+
+    @Value("${loader.mongo.percentage:50}")
+    private Integer percentage;
+
+    private final static Logger LOGGER = LoggerFactory.getLogger(LoaderService.class);
 
     void loadImporte(){
         initExecution(Proceso.IMPORTE)
@@ -77,32 +82,24 @@ public class LoaderService {
      *  100% ------ pageSize
      *   X   ------ total
      *
-     *   X <= percentageSize
+     *   X <= percentage
      *
      * @return Boolean
      */
     private Boolean evalSize(Long total){
-        int pageSize,percentageSize;
-        try{
-            pageSize = Integer.parseInt(Objects.requireNonNull(env.getProperty("loader.page.size")));
-            percentageSize = Integer.parseInt(Objects.requireNonNull(env.getProperty("loader.mongo.percentage")));
-        }catch (Exception e) {
-            pageSize = 200;
-            percentageSize = 50;
-        }
-        return total >= 0L && (100 * total / pageSize) <= percentageSize;
+        return total >= 0L && (100 * total / pageSize) <= percentage;
     }
 
     private Mono<Boolean> initExecution(Proceso proceso) {
-        log.debug("Initializing process: " + proceso.name());
+        LOGGER.debug("Initializing process: " + proceso.name());
         LoaderFlag flag = loaderRepository.retrieveByProcessName(proceso.name());
-        if(flag == null)
+        if (flag == null)
             loaderRepository.store(new LoaderFlag(proceso.name()));
         return Mono.just(flag == null);
     }
 
     //TODO: logging at omission
-    private Boolean finishExecution(Proceso proceso){
+    private Boolean finishExecution(Proceso proceso) {
         return loaderRepository.deleteByProcessName(proceso.name()).wasAcknowledged();
     }
 }
