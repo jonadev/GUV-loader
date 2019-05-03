@@ -14,8 +14,8 @@ public class Deposito {
     @Column(name = "prioridadforzada")
     private Integer prioridadForzada;
 
-    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deposito")
-    private Set<Cheque> cheques;
+//    @OneToMany(fetch = FetchType.LAZY, mappedBy = "deposito")
+//    private Set<Cheque> cheques;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "tipooperatoria")
@@ -41,13 +41,13 @@ public class Deposito {
         this.prioridadForzada = prioridadForzada;
     }
 
-    public Set<Cheque> getCheques() {
-        return cheques;
-    }
-
-    public void setCheques(Set<Cheque> cheques) {
-        this.cheques = cheques;
-    }
+//    public Set<Cheque> getCheques() {
+//        return cheques;
+//    }
+//
+//    public void setCheques(Set<Cheque> cheques) {
+//        this.cheques = cheques;
+//    }
 
     public TipoOperatoria getTipoOperatoria() {
         return tipoOperatoria;

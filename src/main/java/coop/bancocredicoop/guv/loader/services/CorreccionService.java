@@ -1,5 +1,6 @@
 package coop.bancocredicoop.guv.loader.services;
 
+import coop.bancocredicoop.guv.loader.models.Cheque;
 import coop.bancocredicoop.guv.loader.models.Proceso;
 import coop.bancocredicoop.guv.loader.models.mongo.*;
 import coop.bancocredicoop.guv.loader.repositories.mongo.CorreccionCMC7Repository;
@@ -33,7 +34,7 @@ public class CorreccionService {
 
     private static Logger log = LoggerFactory.getLogger(CorreccionService.class);
 
-    public Flux<? extends Correccion> findAll(String type) {
+    public Flux<Cheque> findAll(String type) {
         Proceso proceso;
         try{
             proceso = Proceso.valueOf(type.toUpperCase());
@@ -47,7 +48,7 @@ public class CorreccionService {
 
     }
 
-    private Flux<? extends Correccion> setTTLAndRetrieve(Proceso proceso){
+    private Flux<Cheque> setTTLAndRetrieve(Proceso proceso){
         switch(proceso) {
             case IMPORTE:
                 return importeRepository
@@ -79,7 +80,7 @@ public class CorreccionService {
         }
     }
 
-    private Correccion setTTL(Correccion correccion){
+    private Cheque setTTL(Cheque correccion){
         correccion.setCreatedAt(LocalDateTime.now());
         return correccion;
     }

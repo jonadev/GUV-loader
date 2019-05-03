@@ -1,60 +1,74 @@
 package coop.bancocredicoop.guv.loader.models;
 
 import com.fasterxml.jackson.annotation.JsonFormat;
-import org.hibernate.annotations.Fetch;
-import org.hibernate.annotations.FetchMode;
+import com.fasterxml.jackson.annotation.JsonIgnore;
+import org.springframework.data.mongodb.core.index.Indexed;
 
 import javax.persistence.*;
 
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDateTime;
 import java.util.Date;
 import java.util.Set;
 
 @Entity
-public class Cheque implements Serializable {
+public abstract class Cheque implements Serializable {
 
     @Id
-    private Long id;
+    protected Long id;
 
     @Column(name = "activo")
-    private boolean activo;
+    protected boolean activo = true;
 
     @Column(name = "importe")
-    private BigDecimal importe;
+    protected BigDecimal importe;
 
     @Enumerated(EnumType.STRING)
     @Column(name = "estado")
-    private EstadoCheque estado;
+    protected EstadoCheque estado;
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "es_AR", timezone = "America/Argentina/Buenos_Aires")
     @Column(name = "fechadiferida")
-    private Date fechaDiferida;
+    protected Date fechaDiferida;
 
     @Column(name = "cuit")
-    private String cuit;
+    protected String cuit;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Deposito deposito;
+    protected Deposito deposito;
 
     @ManyToOne(fetch = FetchType.LAZY)
-    private Moneda moneda;
+    protected Moneda moneda;
 
     @Column(name = "fechaingreso1")
-    private Date fechaIngreso1;
+    protected Date fechaIngreso1;
 
     @Column(name = "fechaingreso2")
-    private Date fechaIngreso2;
+    protected Date fechaIngreso2;
 
     @Column(name = "numero")
-    private BigInteger numero;
+    protected BigInteger numero;
 
     @ElementCollection(fetch = FetchType.EAGER)
-    private Set<Observacion> observaciones;
+    protected Set<Observacion> observaciones;
 
     @Embedded
-    private CMC7 cmc7;
+    protected CMC7 cmc7;
+
+    @JsonIgnore
+    @Indexed(name = "expire_at_120_seconds", expireAfterSeconds = 120)
+    protected LocalDateTime createdAt;
+
+    public Cheque(Long id, BigDecimal importe, Date fechaDiferida, String cuit, CMC7 cmc7) {
+        this.id = id;
+        this.importe = importe;
+        this.fechaDiferida = fechaDiferida;
+        this.cuit = cuit;
+        this.cmc7 = cmc7;
+        this.createdAt = null;
+    }
 
     public Long getId() {
         return id;
@@ -159,4 +173,19 @@ public class Cheque implements Serializable {
         CUIT
     }
 
+    public CMC7 getCmc7() {
+        return cmc7;
+    }
+
+    public void setCmc7(CMC7 cmc7) {
+        this.cmc7 = cmc7;
+    }
+
+    public LocalDateTime getCreatedAt() {
+        return createdAt;
+    }
+
+    public void setCreatedAt(LocalDateTime createdAt) {
+        this.createdAt = createdAt;
+    }
 }
