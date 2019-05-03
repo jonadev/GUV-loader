@@ -3,6 +3,7 @@ package coop.bancocredicoop.guv.loader.models;
 import com.fasterxml.jackson.annotation.JsonFormat;
 import com.fasterxml.jackson.annotation.JsonIgnore;
 import org.springframework.data.mongodb.core.index.Indexed;
+import org.springframework.data.mongodb.core.mapping.Field;
 
 import javax.persistence.*;
 
@@ -58,6 +59,7 @@ public abstract class Cheque implements Serializable {
     protected CMC7 cmc7;
 
     @JsonIgnore
+    @Field
     @Indexed(name = "expire_at_120_seconds", expireAfterSeconds = 120)
     protected LocalDateTime createdAt;
 
