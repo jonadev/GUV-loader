@@ -46,4 +46,11 @@ public class LoaderRepositoryImpl implements LoaderRepository {
         log.debug("Removing loader flag for process: " + processName);
         return mongoTemplate.remove(q, LoaderFlag.class);
     }
+
+    @Override
+    public DeleteResult deleteByCreatedAtIsNullAndCollection(Class clazz){
+        Query q = new Query(
+                Criteria.where("createdAt").is(null));
+        return mongoTemplate.remove(q,clazz);
+    }
 }

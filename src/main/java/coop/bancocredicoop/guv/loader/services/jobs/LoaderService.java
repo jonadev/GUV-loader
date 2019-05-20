@@ -1,6 +1,10 @@
 package coop.bancocredicoop.guv.loader.services.jobs;
 
+import com.mongodb.client.result.DeleteResult;
 import coop.bancocredicoop.guv.loader.models.Proceso;
+import coop.bancocredicoop.guv.loader.models.mongo.CorreccionCUIT;
+import coop.bancocredicoop.guv.loader.models.mongo.CorreccionFecha;
+import coop.bancocredicoop.guv.loader.models.mongo.CorreccionImporte;
 import coop.bancocredicoop.guv.loader.models.mongo.LoaderFlag;
 import coop.bancocredicoop.guv.loader.repositories.mongo.implementations.LoaderRepositoryImpl;
 import org.slf4j.Logger;
@@ -10,6 +14,8 @@ import org.springframework.beans.factory.annotation.Value;
 import org.springframework.core.env.Environment;
 import org.springframework.stereotype.Service;
 import reactor.core.publisher.Mono;
+
+import java.util.stream.Stream;
 
 @Service
 public class LoaderService {
@@ -45,7 +51,7 @@ public class LoaderService {
             .flatMap(importeService::getSize)
             .map(this::evalSize)
             .flatMap(load -> load ? importeService.doLoad() : Mono.empty())
-            .map(finish -> finishExecution(Proceso.IMPORTE))
+            .doFinally(finish -> finishExecution(Proceso.IMPORTE))
             .subscribe();
     }
 
@@ -54,7 +60,7 @@ public class LoaderService {
                 .flatMap(cuitService::getSize)
                 .map(this::evalSize)
                 .flatMap(load -> load ? cuitService.doLoad() : Mono.empty())
-                .map(finish -> finishExecution(Proceso.CUIT))
+                .doFinally(finish -> finishExecution(Proceso.CUIT))
                 .subscribe();
     }
 
@@ -63,7 +69,7 @@ public class LoaderService {
                 .flatMap(cmc7Service::getSize)
                 .map(this::evalSize)
                 .flatMap(load -> load ? cmc7Service.doLoad() : Mono.empty())
-                .map(finish -> finishExecution(Proceso.CMC7))
+                .doFinally(finish -> finishExecution(Proceso.CMC7))
                 .subscribe();
     }
 
@@ -72,7 +78,7 @@ public class LoaderService {
                 .flatMap(fechaService::getSize)
                 .map(this::evalSize)
                 .flatMap(load -> load ? fechaService.doLoad() : Mono.empty())
-                .map(finish -> finishExecution(Proceso.FECHA))
+                .doFinally(finish -> finishExecution(Proceso.FECHA))
                 .subscribe();
     }
 
@@ -101,5 +107,17 @@ public class LoaderService {
     //TODO: logging at omission
     private Boolean finishExecution(Proceso proceso) {
         return loaderRepository.deleteByProcessName(proceso.name()).wasAcknowledged();
+    }
+
+    public void refreshPriority() {
+         Stream.of(
+            CorreccionImporte.class,
+            CorreccionCUIT.class,
+            CorreccionCUIT.class,
+            CorreccionFecha.class)
+                 .map(loaderRepository::deleteByCreatedAtIsNullAndCollection)
+                 .map(DeleteResult::wasAcknowledged)
+                 .forEach(result ->
+                         LOGGER.info(result ? "A Collection has been updated" : "Couldn't update the collection"));
     }
 }

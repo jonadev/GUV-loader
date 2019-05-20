@@ -7,4 +7,5 @@ public interface LoaderRepository {
     void store(LoaderFlag flag);
     LoaderFlag retrieveByProcessName(String processName);
     DeleteResult deleteByProcessName(String processName);
+    DeleteResult deleteByCreatedAtIsNullAndCollection(Class clazz);
 }
