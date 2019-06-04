@@ -11,14 +11,15 @@ import org.springframework.data.mongodb.core.query.Criteria;
 import org.springframework.data.mongodb.core.query.Query;
 import org.springframework.stereotype.Repository;
 
-
 @Repository
 public class LoaderRepositoryImpl implements LoaderRepository {
 
     private static Logger log = LoggerFactory.getLogger(LoaderRepositoryImpl.class);
 
     @Autowired
-    MongoTemplate mongoTemplate;
+    private MongoTemplate mongoTemplate;
+
+    private final static String PROCESS_FIELD = "process";
 
     @Override
     public void store(LoaderFlag flag) {
@@ -30,7 +31,7 @@ public class LoaderRepositoryImpl implements LoaderRepository {
     public LoaderFlag retrieveByProcessName(String processName) {
         Query q = new Query(
                     Criteria
-                        .where("process")
+                        .where(PROCESS_FIELD)
                         .is(processName));
 
         return mongoTemplate.findOne(q, LoaderFlag.class);
@@ -40,7 +41,7 @@ public class LoaderRepositoryImpl implements LoaderRepository {
     public DeleteResult deleteByProcessName(String processName) {
         Query q = new Query(
                     Criteria
-                        .where("process")
+                        .where(PROCESS_FIELD)
                         .is(processName));
 
         log.debug("Removing loader flag for process: " + processName);
@@ -53,4 +54,5 @@ public class LoaderRepositoryImpl implements LoaderRepository {
                 Criteria.where("createdAt").is(null));
         return mongoTemplate.remove(q,clazz);
     }
+
 }
