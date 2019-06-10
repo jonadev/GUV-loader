@@ -10,8 +10,8 @@ import javax.persistence.*;
 import java.io.Serializable;
 import java.math.BigDecimal;
 import java.math.BigInteger;
+import java.time.LocalDate;
 import java.time.LocalDateTime;
-import java.util.Date;
 import java.util.Set;
 
 @Entity
@@ -32,7 +32,7 @@ public abstract class Cheque implements Serializable {
 
     @JsonFormat(shape = JsonFormat.Shape.STRING, pattern = "dd/MM/yyyy", locale = "es_AR", timezone = "America/Argentina/Buenos_Aires")
     @Column(name = "fechadiferida")
-    protected Date fechaDiferida;
+    protected LocalDate fechaDiferida;
 
     @Column(name = "cuit")
     protected String cuit;
@@ -44,10 +44,10 @@ public abstract class Cheque implements Serializable {
     protected Moneda moneda;
 
     @Column(name = "fechaingreso1")
-    protected Date fechaIngreso1;
+    protected LocalDate fechaIngreso1;
 
     @Column(name = "fechaingreso2")
-    protected Date fechaIngreso2;
+    protected LocalDate fechaIngreso2;
 
     @Column(name = "numero")
     protected BigInteger numero;
@@ -63,7 +63,7 @@ public abstract class Cheque implements Serializable {
     @Indexed(name = "expire_at_120_seconds", expireAfterSeconds = 120)
     protected LocalDateTime createdAt;
 
-    public Cheque(Long id, BigDecimal importe, Date fechaDiferida, String cuit, CMC7 cmc7) {
+    public Cheque(Long id, BigDecimal importe, LocalDate fechaDiferida, String cuit, CMC7 cmc7) {
         this.id = id;
         this.importe = importe;
         this.fechaDiferida = fechaDiferida;
@@ -104,11 +104,11 @@ public abstract class Cheque implements Serializable {
         this.estado = estado;
     }
 
-    public Date getFechaDiferida() {
+    public LocalDate getFechaDiferida() {
         return fechaDiferida;
     }
 
-    public void setFechaDiferida(Date fechaDiferida) {
+    public void setFechaDiferida(LocalDate fechaDiferida) {
         this.fechaDiferida = fechaDiferida;
     }
 
@@ -136,19 +136,19 @@ public abstract class Cheque implements Serializable {
         this.moneda = moneda;
     }
 
-    public Date getFechaIngreso1() {
+    public LocalDate getFechaIngreso1() {
         return fechaIngreso1;
     }
 
-    public void setFechaIngreso1(Date fechaIngreso1) {
+    public void setFechaIngreso1(LocalDate fechaIngreso1) {
         this.fechaIngreso1 = fechaIngreso1;
     }
 
-    public Date getFechaIngreso2() {
+    public LocalDate getFechaIngreso2() {
         return fechaIngreso2;
     }
 
-    public void setFechaIngreso2(Date fechaIngreso2) {
+    public void setFechaIngreso2(LocalDate fechaIngreso2) {
         this.fechaIngreso2 = fechaIngreso2;
     }
 
