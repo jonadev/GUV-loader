@@ -27,7 +27,7 @@ public class MongoDbMaintenanceJob {
     @Autowired
     private CorreccionImporteRepository correccionImporteRepository;
 
-    @Scheduled(cron="0 * * * * *")
+    @Scheduled(cron="0 0 0 * * *")
     public void cleanCollections() {
         LOGGER.info("Initializing collections");
         this.correccionCMC7Repository.deleteAll();
