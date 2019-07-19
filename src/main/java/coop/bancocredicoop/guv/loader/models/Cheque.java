@@ -61,6 +61,9 @@ public abstract class Cheque implements Serializable {
     @JsonIgnore
     @Field
     @Indexed(name = "expire_at_120_seconds", expireAfterSeconds = 120)
+    //TODO: Pasar a variable.
+    // En caso de necesitar extender el tiempo de expiracion de la clave se debe BORRAR la coleccion completa
+    // de la MongoDB y reinicia la app para que se cree nuevamente
     protected LocalDateTime createdAt;
 
     public Cheque(Long id, BigDecimal importe, LocalDate fechaDiferida, String cuit, CMC7 cmc7) {
