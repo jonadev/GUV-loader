@@ -34,6 +34,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "JOIN c2.deposito d2 " +
                     "WHERE d2.estado = :estadoDeposito " +
                     "AND :observacion member of c2.observaciones) " +
+            "AND d.estado = :estadoDeposito " +
             "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionImporte> findCorreccionImporte(@Param("estado") EstadoCheque estado,
                                                   @Param("ids") List<Long> idList,
@@ -58,6 +59,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "JOIN c2.deposito d2 " +
                     "WHERE d2.estado = :estadoDeposito " +
                     "AND :observacion member of c2.observaciones) " +
+                    "AND d.estado = :estadoDeposito " +
                     "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionCUIT> findCorreccionCUIT(@Param("estado") EstadoCheque estado,
                                             @Param("tiposOperatoria") List<Deposito.TipoOperatoria> tiposOperatoria,
@@ -82,6 +84,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "JOIN c2.deposito d2 " +
                     "WHERE d2.estado = :estadoDeposito " +
                     "AND :observacion member of c2.observaciones) " +
+                    "AND d.estado = :estadoDeposito " +
                     "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionCMC7> findCorreccionCMC7(@Param("estado") EstadoCheque estado,
                                             @Param("ids") List<Long> idList,
@@ -106,6 +109,7 @@ public interface ChequeRepository extends CrudRepository<Cheque, Long> {
                     "JOIN c2.deposito d2 " +
                     "WHERE d2.estado = :estadoDeposito " +
                     "AND :observacion member of c2.observaciones) " +
+                    "AND d.estado = :estadoDeposito " +
                     "ORDER BY d.prioridadForzada ASC ")
     List<CorreccionFecha> findCorreccionFecha(@Param("estado") EstadoCheque estado,
                                               @Param("tiposOperatoria") List<Deposito.TipoOperatoria> tiposOperatoria,
